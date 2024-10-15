@@ -1,46 +1,39 @@
 package com.example.bt4;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.widget.TextView;
-import android.widget.Toast;
-
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import java.util.List;
 
 public class StudentListActivity extends AppCompatActivity {
 
-    private RecyclerView studentRecyclerView;
+    private RecyclerView recyclerView;
     private StudentAdapter studentAdapter;
     private StudentRepository studentRepository;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_student_list);
 
-        studentRecyclerView = findViewById(R.id.studentRecyclerView);
-        studentRepository = new StudentRepository(this);
-
-        // Get the class ID from the intent
+        // Nhận classId từ intent
         int classId = getIntent().getIntExtra("classId", -1);
 
-        // Check if class ID is valid
-        if (classId != -1) {
-            updateStudentList(classId);
-        } else {
-            Toast.makeText(this, "Invalid Class ID", Toast.LENGTH_SHORT).show();
-        }
+        recyclerView = findViewById(R.id.recyclerViewStudents);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        studentRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-    }
+        studentRepository = new StudentRepository(this);
+        studentRepository.open();
 
-    private void updateStudentList(int classId) {
+        // Lấy danh sách sinh viên theo classId
         List<StudentModel> studentList = studentRepository.getStudentsByClassId(classId);
+
+        // Gán danh sách sinh viên vào Adapter
         studentAdapter = new StudentAdapter(studentList);
-        studentRecyclerView.setAdapter(studentAdapter);
+        recyclerView.setAdapter(studentAdapter);
+
+        studentRepository.close();
     }
 }

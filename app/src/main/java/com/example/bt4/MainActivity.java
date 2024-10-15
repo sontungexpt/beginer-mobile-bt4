@@ -1,5 +1,6 @@
 package com.example.bt4;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -13,13 +14,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+    public static final int ADD_STUDENT_REQUEST_CODE = 1;
 
     private EditText classNameEditText;
     private Button addClassButton;
     private RecyclerView classRecyclerView;
     private ClassAdapter classAdapter;
     private ClassRepository classRepository;
-    private EditText studentCountEditText;
     private EditText teacherEditText;
 
     @Override
@@ -28,7 +29,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         classNameEditText = findViewById(R.id.classNameEditText);
-        studentCountEditText = findViewById(R.id.studentCountEditText);
         teacherEditText = findViewById(R.id.teacherEditText);
         addClassButton = findViewById(R.id.addClassButton);
         classRecyclerView = findViewById(R.id.classRecyclerView);
@@ -42,16 +42,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String className = classNameEditText.getText().toString();
-                String studentCountStr = studentCountEditText.getText().toString();
                 String teacherName = teacherEditText.getText().toString();
 
-                if (!className.isEmpty() && !studentCountStr.isEmpty() && !teacherName.isEmpty()) {
-                    int studentCount = Integer.parseInt(studentCountStr);
-                    classRepository.addClass(new ClassModel(0, className, studentCount, teacherName));
+                if (!className.isEmpty()  && !teacherName.isEmpty()) {
+                    classRepository.addClass(new ClassModel(0, className,  teacherName));
                     updateClassList();
-                    classNameEditText.setText("");
-                    studentCountEditText.setText("");
-                    teacherEditText.setText("");
+                    clearInputs();
                 } else {
                     Toast.makeText(MainActivity.this, "All fields must be filled", Toast.LENGTH_SHORT).show();
                 }
@@ -60,9 +56,25 @@ public class MainActivity extends AppCompatActivity {
 
         updateClassList();
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == ADD_STUDENT_REQUEST_CODE && resultCode == RESULT_OK) {
+            // Refresh the class list
+            updateClassList();
+        }
+    }
+
+
+    private void clearInputs() {
+        classNameEditText.setText("");
+        teacherEditText.setText("");
+    }
+
     private void updateClassList() {
         List<ClassModel> classList = classRepository.getAllClasses();
-        classAdapter = new ClassAdapter(classList);
+        classAdapter = new ClassAdapter(classList, classRepository);
         classRecyclerView.setAdapter(classAdapter);
     }
 

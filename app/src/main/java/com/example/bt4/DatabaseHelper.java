@@ -24,9 +24,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String CREATE_TABLE_CLASS = "CREATE TABLE " + TABLE_CLASS + "("
             + COLUMN_CLASS_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
             + COLUMN_CLASS_NAME + " TEXT NOT NULL,"
-            + COLUMN_STUDENT_COUNT + " INTEGER NOT NULL," // Thêm cột số lượng sinh viên
-            + COLUMN_TEACHER + " TEXT NOT NULL);"; // Thêm cột tên giáo viên
-
+            + COLUMN_STUDENT_COUNT + " INTEGER NOT NULL,"
+            + COLUMN_TEACHER + " TEXT NOT NULL);";
 
     // SQL statement to create student table
     private static final String CREATE_TABLE_STUDENT = "CREATE TABLE " + TABLE_STUDENT + "("

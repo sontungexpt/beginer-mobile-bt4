@@ -3,13 +3,11 @@ package com.example.bt4;
 public class ClassModel {
     private int id;
     private String name;
-    private int studentCount; // Số lượng sinh viên
     private String teacher; // Giáo viên phụ trách
 
-    public ClassModel(int id, String name, int studentCount, String teacher) {
+    public ClassModel(int id, String name,  String teacher) {
         this.id = id;
         this.name = name;
-        this.studentCount = studentCount;
         this.teacher = teacher;
     }
 
@@ -30,13 +28,6 @@ public class ClassModel {
         this.name = name;
     }
 
-    public int getStudentCount() {
-        return studentCount;
-    }
-
-    public void setStudentCount(int studentCount) {
-        this.studentCount = studentCount;
-    }
 
     public String getTeacher() {
         return teacher;

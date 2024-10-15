@@ -1,5 +1,6 @@
 package com.example.bt4;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -22,7 +23,9 @@ public class StudentRepository {
     public void close() {
         dbHelper.close();
     }
-
+    public void insertStudent(ContentValues values) {
+        database.insert(DatabaseHelper.TABLE_STUDENT, null, values);
+    }
     // Lấy danh sách sinh viên theo ID lớp học
     public List<StudentModel> getStudentsByClassId(int classId) {
         List<StudentModel> students = new ArrayList<>();
